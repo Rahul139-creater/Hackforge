@@ -113,11 +113,20 @@ export default function EditorPage() {
 
   const handleRun = useCallback(async () => {
     if (!code.trim()) { toast.error('Write some code first!'); return }
+
+    let currentInput = input;
+    if (!currentInput || !currentInput.trim()) {
+      currentInput = selectedProblem?.testCases?.[0]?.input || selectedProblem?.examples?.[0]?.input || '';
+      if (currentInput) {
+        setInput(currentInput);
+      }
+    }
+
     setIsRunning(true)
     setActiveTab('output')
     setRunResult(null)
     try {
-      const result = await runCode({ code, language, input })
+      const result = await runCode({ code, language, input: currentInput })
       setRunResult(result)
       if (result.success) toast.success('Code executed!', { icon: '▶️' })
       else toast.error('Runtime error detected')
@@ -128,7 +137,7 @@ export default function EditorPage() {
     } finally {
       setIsRunning(false)
     }
-  }, [code, language, input])
+  }, [code, language, input, selectedProblem])
 
   useKeyboardShortcut('Enter', handleRun, true)
 
