@@ -75,7 +75,7 @@ export default function EditorPage() {
     if (p) setSelectedProblem(p)
   }, [problemId])
 
-  const onBack = () => navigate('/')
+  const onBack = () => navigate('/home')
   const [language, setLanguage] = useState('java')
   const [code, setCode] = useState('')
   const [input, setInput] = useState('')

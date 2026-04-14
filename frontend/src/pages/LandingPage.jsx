@@ -102,8 +102,11 @@ const FloatingCard = ({ delay, x, y, children }) => (
   </motion.div>
 )
 
-export default function LandingPage({ onStart }) {
+import { useNavigate } from 'react-router-dom'
+
+export default function LandingPage() {
   const [hoveredProblem, setHoveredProblem] = useState(null)
+  const navigate = useNavigate()
 
   const container = {
     hidden: { opacity: 0 },
@@ -144,7 +147,7 @@ export default function LandingPage({ onStart }) {
             Gemini AI Active
           </div> */}
           <button
-            onClick={() => onStart()}
+            onClick={() => navigate('/editor')}
             className="btn-primary text-sm"
           >
             Launch Editor <ArrowRight size={14} />
@@ -186,14 +189,14 @@ export default function LandingPage({ onStart }) {
 
           <motion.div variants={item} className="flex flex-wrap items-center justify-center gap-4">
             <button
-              onClick={() => onStart()}
+              onClick={() => navigate('/editor')}
               className="btn-primary text-base px-8 py-3.5 rounded-2xl shadow-lg shadow-brand-500/20"
             >
               <Play size={18} />
               Start Coding Now
             </button>
             <button
-              onClick={() => onStart(PROBLEMS[0])}
+              onClick={() => navigate('/editor/' + PROBLEMS[0].id)}
               className="btn-secondary text-base px-8 py-3.5 rounded-2xl"
             >
               <BookOpen size={16} />
@@ -391,7 +394,7 @@ export default function LandingPage({ onStart }) {
                 onHoverStart={() => setHoveredProblem(p.id)}
                 onHoverEnd={() => setHoveredProblem(null)}
                 className="glass-card p-5 cursor-pointer border border-white/5 hover:border-brand-500/30 transition-all group"
-                onClick={() => onStart(p)}
+                onClick={() => navigate('/editor/' + p.id)}
               >
                 <div className="flex items-start justify-between mb-3">
                   <span className={`badge border text-xs ${
@@ -493,7 +496,7 @@ export default function LandingPage({ onStart }) {
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              onClick={() => onStart()}
+              onClick={() => navigate('/editor')}
               className="btn-primary text-lg px-10 py-4 rounded-2xl shadow-xl shadow-brand-500/25 mx-auto"
             >
               <Brain size={20} />
