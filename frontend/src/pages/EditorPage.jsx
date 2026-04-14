@@ -88,7 +88,6 @@ export default function EditorPage() {
   const [mentorResult, setMentorResult] = useState(null)
   const [mentorQuestion, setMentorQuestion] = useState('')
   const [showProblem, setShowProblem] = useState(true)
-  const [editorMounted, setEditorMounted] = useState(false)
   const monacoRef = useRef(null)
 
   // Load starter code when problem or language changes
@@ -106,7 +105,6 @@ export default function EditorPage() {
     monacoRef.current = monaco
     monaco.editor.defineTheme('codementor-dark', MONACO_THEME)
     monaco.editor.setTheme('codementor-dark')
-    setEditorMounted(true)
   }
 
   const handleRun = useCallback(async () => {

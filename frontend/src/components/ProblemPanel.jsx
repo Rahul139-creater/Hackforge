@@ -148,34 +148,6 @@ export default function ProblemPanel({ problem, onCollapse }) {
           </div>
         )}
 
-        {/* Test Cases Preview */}
-        <div>
-          <div className="flex items-center gap-1.5 mb-2">
-            <CheckCircle size={12} className="text-accent-purple" />
-            <span className="section-label">Test Cases ({problem.testCases?.length})</span>
-          </div>
-          <div className="space-y-2">
-            {problem.testCases?.slice(0, 2).map((tc, i) => (
-              <div key={tc.id} className="bg-surface-900/40 rounded-lg border border-white/5 px-3 py-2">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs text-slate-500">{tc.label}</span>
-                  <span className="text-xs text-brand-400 font-mono">#{tc.id}</span>
-                </div>
-                <div className="text-xs font-mono text-slate-500 truncate">
-                  in: <span className="text-slate-400">{tc.input.replace(/\n/g, '↵')}</span>
-                </div>
-                <div className="text-xs font-mono text-slate-500 truncate">
-                  out: <span className="text-accent-green">{tc.expectedOutput}</span>
-                </div>
-              </div>
-            ))}
-            {problem.testCases?.length > 2 && (
-              <p className="text-xs text-slate-600 text-center py-1">
-                +{problem.testCases.length - 2} more hidden test cases
-              </p>
-            )}
-          </div>
-        </div>
 
         {/* Hint pill */}
         <div className="bg-accent-purple/8 border border-accent-purple/15 rounded-xl p-3">

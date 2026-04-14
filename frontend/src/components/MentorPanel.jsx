@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Brain, Send, Loader2, Lightbulb, Bug, TrendingUp,
