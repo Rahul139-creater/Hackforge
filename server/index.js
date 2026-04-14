@@ -3,6 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import axios from 'axios';
 import { GoogleGenAI } from '@google/genai';
+import mongoose from 'mongoose';
+import authRouter from './routes/auth.js';
 
 dotenv.config();
 
@@ -17,7 +19,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/hackforge')
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
+
 const PORT = process.env.PORT || 3000;
+
+app.use('/api/auth', authRouter);
 
 // Helper to map languages to Piston API format
 const PISTON_LANGUAGE_MAP = {

@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const GOOGLE_ICON = (
     <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
@@ -171,6 +173,7 @@ function InputField({ label, type = "text", placeholder, value, onChange, icon }
                     type={isPass && show ? "text" : type}
                     placeholder={placeholder}
                     value={value}
+                    required
                     onChange={onChange}
                     className={`w-full bg-slate-800/60 border border-slate-700/60 rounded-lg py-2.5 pr-10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-500/70 focus:ring-1 focus:ring-teal-500/30 transition-all duration-200 ${icon ? "pl-9" : "pl-3"}`}
                 />
@@ -191,6 +194,7 @@ function InputField({ label, type = "text", placeholder, value, onChange, icon }
 export default function AuthPage() {
     const navigate = useNavigate();
     const [mode, setMode] = useState("login");
+    const [loading, setLoading] = useState(false);
     const [animating, setAnimating] = useState(false);
     const [form, setForm] = useState({ name: "", email: "", password: "", confirm: "", username: "" });
 
@@ -206,10 +210,38 @@ export default function AuthPage() {
 
     const set = (key) => (e) => setForm((p) => ({ ...p, [key]: e.target.value }));
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Redirect to Landing Page (Home) upon login/register
-        navigate("/home");
+        setLoading(true);
+
+        if (mode === "register" && form.password !== form.confirm) {
+            toast.error("Passwords do not match");
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const url = mode === "register" 
+                ? "http://localhost:3000/api/auth/signup" 
+                : "http://localhost:3000/api/auth/signin";
+            
+            const payload = mode === "register" 
+                ? { name: form.name, username: form.username, email: form.email, password: form.password }
+                : { email: form.email, password: form.password };
+
+            const response = await axios.post(url, payload);
+
+            if (response.data.success || response.data.token) {
+                localStorage.setItem("token", response.data.token);
+                toast.success(mode === "login" ? "Welcome back!" : "Account created successfully!");
+                navigate("/home");
+            }
+        } catch (error) {
+            const errorMsg = error.response?.data?.error || error.response?.data?.errors?.[0]?.msg || "Authentication failed";
+            toast.error(errorMsg);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleGoogle = () => navigate("/home");
@@ -371,6 +403,7 @@ export default function AuthPage() {
                         {mode === "register" && (
                             <>
                                 <InputField
+                                
                                     label="Full Name"
                                     placeholder="Jane Doe"
                                     value={form.name}
@@ -426,13 +459,14 @@ export default function AuthPage() {
 
                         <button
                             type="submit"
-                            className="w-full py-2.5 rounded-lg text-sm font-semibold text-slate-900 transition-all duration-200 mt-1 hover:opacity-90 active:scale-95"
+                            disabled={loading}
+                            className={`w-full py-2.5 rounded-lg text-sm font-semibold text-slate-900 transition-all duration-200 mt-1 hover:opacity-90 active:scale-95 ${loading ? 'opacity-70 cursor-wait' : ''}`}
                             style={{
                                 background: "linear-gradient(135deg,#2dd4bf,#3b82f6)",
                                 boxShadow: "0 0 20px rgba(45,212,191,0.25)",
                             }}
                         >
-                            {mode === "login" ? "Sign In →" : "Create Account →"}
+                            {loading ? "Please wait..." : (mode === "login" ? "Sign In →" : "Create Account →")}
                         </button>
 
                         {mode === "register" && (

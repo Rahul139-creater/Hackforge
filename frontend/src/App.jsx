@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom'
 import AuthPage from './pages/Auth/Auth.jsx'
 import LandingPage from './pages/LandingPage.jsx'
 import EditorPage from './pages/EditorPage.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 export default function App() {
   return (
@@ -24,9 +25,9 @@ export default function App() {
       />
       <Routes>
         <Route path="/" element={<AuthPage />} />
-        <Route path="/home" element={<LandingPage />} />
-        <Route path="/editor" element={<EditorPage />} />
-        <Route path="/editor/:problemId" element={<EditorPage />} />
+        <Route path="/home" element={<ProtectedRoute><LandingPage /></ProtectedRoute>} />
+        <Route path="/editor" element={<ProtectedRoute><EditorPage /></ProtectedRoute>} />
+        <Route path="/editor/:problemId" element={<ProtectedRoute><EditorPage /></ProtectedRoute>} />
       </Routes>
     </div>
   )
