@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowLeft, Play, Zap, Brain, Trophy, ChevronDown,
@@ -63,8 +64,18 @@ const MONACO_THEME = {
   },
 }
 
-export default function EditorPage({ problem: initialProblem, onBack }) {
-  const [selectedProblem, setSelectedProblem] = useState(initialProblem || PROBLEMS[0])
+export default function EditorPage() {
+  const { problemId } = useParams()
+  const navigate = useNavigate()
+  const initialProblem = PROBLEMS.find(p => p.id === problemId) || PROBLEMS[0]
+  const [selectedProblem, setSelectedProblem] = useState(initialProblem)
+
+  useEffect(() => {
+    const p = PROBLEMS.find(pr => pr.id === problemId)
+    if (p) setSelectedProblem(p)
+  }, [problemId])
+
+  const onBack = () => navigate('/')
   const [language, setLanguage] = useState('java')
   const [code, setCode] = useState('')
   const [input, setInput] = useState('')
@@ -175,7 +186,7 @@ export default function EditorPage({ problem: initialProblem, onBack }) {
   return (
     <div className="h-screen flex flex-col overflow-hidden bg-surface-900">
       {/* Top Bar */}
-      <header className="flex items-center gap-3 px-4 py-3 border-b border-white/5 bg-surface-800/80 backdrop-blur-xl flex-shrink-0">
+      <header className="relative z-50 flex items-center gap-3 px-4 py-3 border-b border-white/5 bg-surface-800/80 backdrop-blur-xl flex-shrink-0">
         <button
           onClick={onBack}
           className="w-8 h-8 rounded-lg bg-surface-700 hover:bg-surface-600 flex items-center justify-center transition-colors"
@@ -196,7 +207,7 @@ export default function EditorPage({ problem: initialProblem, onBack }) {
             {PROBLEMS.map(p => (
               <button
                 key={p.id}
-                onClick={() => setSelectedProblem(p)}
+                onClick={() => navigate(`/editor/${p.id}`)}
                 className={`w-full text-left px-3 py-2.5 text-sm hover:bg-surface-700/50 transition-colors flex items-center gap-2 ${selectedProblem?.id === p.id ? 'text-brand-400' : 'text-slate-300'}`}
               >
                 {selectedProblem?.id === p.id && <div className="w-1.5 h-1.5 bg-brand-400 rounded-full" />}
