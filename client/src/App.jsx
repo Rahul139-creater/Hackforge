@@ -3,6 +3,7 @@ import { Toaster } from 'react-hot-toast'
 import { Routes, Route } from 'react-router-dom'
 import LandingPage from './pages/LandingPage.jsx'
 import EditorPage from './pages/EditorPage.jsx'
+import AuthPage from './pages/Auth/Auth.jsx'
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
       />
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/auth" element={<AuthPage />} />
         <Route path="/editor" element={<EditorPage />} />
         <Route path="/editor/:problemId" element={<EditorPage />} />
       </Routes>

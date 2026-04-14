@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Brain, Code2, Trophy, Zap, Play, ChevronRight,
@@ -103,17 +102,8 @@ const FloatingCard = ({ delay, x, y, children }) => (
   </motion.div>
 )
 
-export default function LandingPage() {
+export default function LandingPage({ onStart }) {
   const [hoveredProblem, setHoveredProblem] = useState(null)
-  const navigate = useNavigate()
-
-  const onStart = (problem = null) => {
-    if (problem) {
-      navigate(`/editor/${problem.id}`)
-    } else {
-      navigate('/editor')
-    }
-  }
 
   const container = {
     hidden: { opacity: 0 },
@@ -149,10 +139,10 @@ export default function LandingPage() {
           animate={{ opacity: 1, x: 0 }}
           className="flex items-center gap-3"
         >
-          <div className="hidden md:flex items-center gap-1.5 text-xs text-accent-green bg-accent-green/10 border border-accent-green/20 px-3 py-1.5 rounded-full">
+          {/* <div className="hidden md:flex items-center gap-1.5 text-xs text-accent-green bg-accent-green/10 border border-accent-green/20 px-3 py-1.5 rounded-full">
             <div className="w-1.5 h-1.5 bg-accent-green rounded-full animate-pulse" />
             Gemini AI Active
-          </div>
+          </div> */}
           <button
             onClick={() => onStart()}
             className="btn-primary text-sm"
